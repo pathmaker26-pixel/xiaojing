@@ -1,0 +1,84 @@
+:root {
+  color-scheme: light dark;
+  --bg: #fdfdfc;
+  --fg: #2a2a2a;
+  --muted: #8a8a8a;
+  --max-width: 42rem;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #191919;
+    --fg: #e6e6e6;
+    --muted: #888888;
+  }
+}
+
+* { box-sizing: border-box; }
+
+body {
+  background: var(--bg);
+  color: var(--fg);
+  font-family: "Songti SC", "STSong", Georgia, "Noto Serif SC", serif;
+  line-height: 1.85;
+  max-width: var(--max-width);
+  margin: 0 auto;
+  padding: 4rem 1.5rem 6rem;
+  font-size: 1.05rem;
+}
+
+a { color: inherit; }
+
+.site-header {
+  margin-bottom: 4rem;
+}
+
+.site-title {
+  text-decoration: none;
+  font-size: 1.1rem;
+  letter-spacing: 0.05em;
+}
+
+.post-list {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.post-item-title {
+  display: block;
+  text-decoration: none;
+  font-size: 1.15rem;
+}
+
+.post-item-date,
+.post-date {
+  display: block;
+  color: var(--muted);
+  font-size: 0.85rem;
+  margin-top: 0.3rem;
+}
+
+.post-title {
+  margin-bottom: 0.2rem;
+  font-weight: normal;
+  font-size: 1.6rem;
+}
+
+.post-body {
+  margin-top: 2.5rem;
+}
+
+.post-body p {
+  margin: 0 0 1.4em;
+}
+
+.empty-note {
+  color: var(--muted);
+}
+
+.site-footer {
+  margin-top: 6rem;
+  color: var(--muted);
+  font-size: 0.8rem;
+}
