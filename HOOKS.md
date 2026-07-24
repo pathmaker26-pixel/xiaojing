@@ -20,7 +20,7 @@ python3 scripts/import_post.py <稿文件路径> [--publish]
 两种可能的接法，供参考，不预先选定：
 
 1. 公众号发布脚本在"发 MMDD"确认发布成功后，追加一行调用本脚本：
-   `python3 ~/自建站/scripts/import_post.py <稿文件路径> --publish`
+   `python3 ~/生长系统/自建站/scripts/import_post.py <稿文件路径> --publish`
 2. 本仓库这边另起一个独立的轮询，定期读 `网络/出稿/已出稿清单.md` 有没有新增行，读到就调用本脚本——如果不想改发布脚本本身，这个方向更干净（完全不碰对方文件）。
 
 ## 边界
