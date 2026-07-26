@@ -13,6 +13,11 @@
 <body>
   <header class="site-header">
     <a class="site-title" href="{{ .Site.Home.RelPermalink }}">{{ .Site.Title }}</a>
+    <nav class="site-nav">
+      {{ range .Site.Menus.main }}
+      <a href="{{ .URL | relURL }}">{{ .Name }}</a>
+      {{ end }}
+    </nav>
   </header>
   <main>
     {{ block "main" . }}{{ end }}

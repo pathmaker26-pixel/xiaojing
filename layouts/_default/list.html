@@ -1,19 +1,25 @@
 {{ define "main" }}
+{{/* 首页把两栏合起来按时间倒序，每条挂一个小标签（记／稿）——分栏是为了能各自翻，
+     不是为了把一条流劈成两半；section 页照旧只列自己那栏，那时不重复挂标签。
+     2026-07-26 改：原来这里写死 where … "Type" "posts"，加了 notes 之后首页会漏掉它。 */}}
 <div class="post-list">
   {{ if .IsHome }}
-    {{ $posts := where site.RegularPages "Type" "posts" }}
-    {{ if $posts }}
-      {{ range $posts.ByDate.Reverse }}
+    {{ $pages := where site.RegularPages "Type" "in" (slice "notes" "posts") }}
+    {{ if $pages }}
+      {{ range $pages.ByDate.Reverse }}
       <article class="post-item">
         <a class="post-item-title" href="{{ .RelPermalink }}">{{ .Title }}</a>
-        <time class="post-item-date" datetime="{{ .Date.Format "2006-01-02" }}">{{ .Date.Format "2006-01-02" }}</time>
+        <div class="post-item-meta">
+          <span class="post-item-kind">{{ if eq .Type "notes" }}记{{ else }}稿{{ end }}</span>
+          <time class="post-item-date" datetime="{{ .Date.Format "2006-01-02" }}">{{ .Date.Format "2006-01-02" }}</time>
+        </div>
       </article>
       {{ end }}
     {{ else }}
       <p class="empty-note">尚无内容。</p>
     {{ end }}
   {{ else }}
-    {{ range .Pages }}
+    {{ range .Pages.ByDate.Reverse }}
     <article class="post-item">
       <a class="post-item-title" href="{{ .RelPermalink }}">{{ .Title }}</a>
       <time class="post-item-date" datetime="{{ .Date.Format "2006-01-02" }}">{{ .Date.Format "2006-01-02" }}</time>

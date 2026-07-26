@@ -39,6 +39,40 @@ a { color: inherit; }
   letter-spacing: 0.05em;
 }
 
+.site-nav {
+  margin-top: 0.8rem;
+  font-size: 0.9rem;
+}
+
+.site-nav a {
+  text-decoration: none;
+  color: var(--muted);
+  margin-right: 1.2rem;
+  letter-spacing: 0.05em;
+}
+
+.site-nav a:hover {
+  color: var(--fg);
+}
+
+/* 首页那条小标签（记／稿）：只是让人一眼分得出，不该抢标题的份量 */
+.post-item-meta {
+  display: flex;
+  align-items: baseline;
+  gap: 0.7rem;
+  margin-top: 0.3rem;
+}
+
+.post-item-kind {
+  color: var(--muted);
+  font-size: 0.75rem;
+  letter-spacing: 0.1em;
+}
+
+.post-item-meta .post-item-date {
+  margin-top: 0;
+}
+
 .post-list {
   display: flex;
   flex-direction: column;

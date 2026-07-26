@@ -8,26 +8,35 @@
 --publish 会额外执行 git add/commit/push（触发 GitHub Actions 自动构建部署）；
 不加则只在本地生成文章文件，留给人工确认后再提交。
 
-预期输入格式（与 网络/出稿/ 现有样本一致的三段式）：
-    状态/取材/角度 等元数据
+2026-07-26 改成薄壳：解析这一段留在这里，写文件/提交/推那一段搬去
+`publish_to_site.py`——她自己发的那两条入口（A 类她的字、B 类我生成的沉淀）
+手上只有「标题＋正文」，接不上这个只吃稿文件的接口，所以底座得共用。
+这个文件的对外行为一字未改。
+
+预期输入格式（三段式，硬要求）：
+    平台/取材/角度 等元数据
     ---
     **标题**
 
     正文段落...
     ---
     回"发 MMDD"→进发布链路 ... （引导语，忽略）
+
+**格式不符合就直接退出，不兜底**——自建站是真发出去，宁可拒收也不能发个残的上去。
+（公众号那条链路有兜底：退回用文件名当标题。两边不一样是故意的。）
+格式规范写在 `配置/每日回应_指令.md` 的「稿文件格式（硬规范）」一节。
 """
 import datetime
 import re
-import subprocess
 import sys
 from pathlib import Path
 
-ROOT = Path(__file__).resolve().parent.parent
-DEST_DIR = ROOT / "content" / "posts"
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+from publish_to_site import publish  # noqa: E402
 
 
-def convert(src: Path) -> Path:
+def parse(src: Path) -> dict:
+    """把三段式稿文件拆成 标题／正文／日期。只解析，不写盘。"""
     text = src.read_text(encoding="utf-8")
     parts = text.split("---")
     if len(parts) < 3:
@@ -46,28 +55,14 @@ def convert(src: Path) -> Path:
     m = re.search(r"(\d{8})", src.stem)
     if m:
         d = m.group(1)
-        date_fmt = f"{d[0:4]}-{d[4:6]}-{d[6:8]}"
+        date = datetime.date(int(d[0:4]), int(d[4:6]), int(d[6:8]))
     else:
-        date_fmt = datetime.date.today().isoformat()
+        date = datetime.date.today()
 
+    # slug 按**稿文件名**取，不按标题——站上历史文章都是这么来的，换成标题会换掉 URL
     slug = re.sub(r"^稿_\d{8}_", "", src.stem) or src.stem
 
-    DEST_DIR.mkdir(parents=True, exist_ok=True)
-    dest = DEST_DIR / f"{date_fmt}-{slug}.md"
-
-    escaped_title = title.replace('"', '\\"')
-    front_matter = f'---\ntitle: "{escaped_title}"\ndate: {date_fmt}\ndraft: false\n---\n\n'
-    dest.write_text(front_matter + content + "\n", encoding="utf-8")
-    return dest
-
-
-def publish(dest: Path) -> None:
-    rel = dest.relative_to(ROOT)
-    subprocess.run(["git", "add", str(rel)], cwd=ROOT, check=True)
-    subprocess.run(
-        ["git", "commit", "-m", f"add post: {dest.stem}"], cwd=ROOT, check=True
-    )
-    subprocess.run(["git", "push"], cwd=ROOT, check=True)
+    return {"title": title, "body": content, "date": date, "slug": slug}
 
 
 def main() -> None:
@@ -80,12 +75,21 @@ def main() -> None:
     if not src.is_file():
         sys.exit(f"文件不存在: {src}")
 
-    dest = convert(src)
-    print(f"已生成: {dest}")
+    parsed = parse(src)
+    # 走出稿流水线进来的是成稿 → 落「稿」那一栏（notes 那栏是她自己落的字）
+    result = publish(
+        parsed["title"], parsed["body"], section="posts",
+        date=parsed["date"], slug=parsed["slug"], push=do_publish,
+    )
+    print(f"已生成: {Path(result['file'])}")
 
     if do_publish:
-        publish(dest)
-        print("已提交并推送，GitHub Actions 将自动构建部署。")
+        if result.get("pushed"):
+            print("已提交并推送，GitHub Actions 将自动构建部署。")
+        elif not result.get("changed"):
+            print("站上已经是这个内容，没有改动可提交（不算失败）。")
+        else:
+            sys.exit(f"提交了但没推成功：{result.get('detail')}")
 
 
 if __name__ == "__main__":

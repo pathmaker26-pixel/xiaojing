@@ -7,5 +7,18 @@ timeZone = "Asia/Shanghai"
 [params]
   description = ""
 
+# 两栏：记＝她自己落的字（记录场，无禁忌）；稿＝出稿流水线送进来的成稿。
+# 2026-07-26 分栏，理由见 想法/待办/_起子/ 里这一轮的交接：自建站是她自己的记录场，
+# 她自己记自己发是主路，出稿只是支流——两种东西混在一条流里看不出分别。
+[[menu.main]]
+  name = "记"
+  url = "/notes/"
+  weight = 1
+
+[[menu.main]]
+  name = "稿"
+  url = "/posts/"
+  weight = 2
+
 [markup.goldmark.renderer]
   unsafe = true
