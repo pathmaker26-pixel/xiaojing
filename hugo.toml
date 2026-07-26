@@ -2,6 +2,7 @@ baseURL = "https://pathmaker26-pixel.github.io/xiaojing/"
 locale = "zh-CN"
 title = "小镜"
 paginate = 10
+timeZone = "Asia/Shanghai"
 
 [params]
   description = ""
