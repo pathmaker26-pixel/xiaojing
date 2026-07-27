@@ -1,9 +1,14 @@
 {{ define "main" }}
-<article class="post">
-  <h1 class="post-title">{{ .Title }}</h1>
-  <time class="post-date" datetime="{{ .Date.Format "2006-01-02" }}">{{ .Date.Format "2006-01-02" }}</time>
-  <div class="post-body">
-    {{ .Content }}
-  </div>
-</article>
+  {{ if eq .Type "notes" }}
+    <article class="note-full">
+      <time class="note-full-date" datetime="{{ .Date.Format "2006-01-02" }}">{{ .Date.Format "2006-01-02" }}</time>
+      <div class="note-full-body">{{ .Content }}</div>
+    </article>
+  {{ else }}
+    <article class="post">
+      <h1 class="post-title">{{ .Title }}</h1>
+      <time class="post-date" datetime="{{ .Date.Format "2006-01-02" }}">{{ .Date.Format "2006-01-02" }}</time>
+      <div class="post-body">{{ .Content }}</div>
+    </article>
+  {{ end }}
 {{ end }}

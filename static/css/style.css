@@ -115,3 +115,15 @@ body {
 .empty-note {
   color: var(--meta);
 }
+
+/* 记 —— 全文页 */
+.note-full { max-width: 680px; margin: 0 auto; }
+.note-full-date {
+  display: block;
+  font-size: 0.82rem;
+  color: var(--meta);
+  margin-bottom: 1rem;
+}
+.note-full-body p {
+  margin: 0.8rem 0;
+}
