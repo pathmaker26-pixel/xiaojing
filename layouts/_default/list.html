@@ -1,9 +1,9 @@
 {{ define "main" }}
 <div class="post-list">
-  {{ $all := where site.RegularPages "Type" "in" (slice "notes" "posts") }}
-  {{ $sorted := sort $all "Date" "desc" }}
-  {{ if $sorted }}
-    {{ range $sorted }}
+  {{ if .IsHome }}
+    {{ $pages := where site.RegularPages "Type" "in" (slice "notes" "posts") }}
+    {{ $pages := sort $pages "Date" "desc" }}
+    {{ range $pages }}
       {{ if eq .Type "notes" }}
       <article class="note-item">
         <a class="note-link" href="{{ .RelPermalink }}">
@@ -23,7 +23,23 @@
       {{ end }}
     {{ end }}
   {{ else }}
-    <p class="empty-note">尚无内容。</p>
+    {{ $pages := sort .RegularPages "Date" "desc" }}
+    {{ range $pages }}
+      {{ if eq .Type "notes" }}
+      <article class="note-item">
+        <a class="note-link" href="{{ .RelPermalink }}">
+          <time class="note-date" datetime="{{ .Date.Format "2006-01-02" }}">{{ .Date.Format "2006-01-02" }}</time>
+          <div class="note-excerpt">{{ .Summary | plainify }}</div>
+          <span class="note-more">【……】</span>
+        </a>
+      </article>
+      {{ else }}
+      <article class="post-item">
+        <a class="post-item-title" href="{{ .RelPermalink }}">{{ .Title }}</a>
+        <time class="post-item-date" datetime="{{ .Date.Format "2006-01-02" }}">{{ .Date.Format "2006-01-02" }}</time>
+      </article>
+      {{ end }}
+    {{ end }}
   {{ end }}
 </div>
 {{ end }}
