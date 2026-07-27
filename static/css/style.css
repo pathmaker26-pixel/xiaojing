@@ -116,3 +116,20 @@ a { color: inherit; }
   color: var(--muted);
   font-size: 0.8rem;
 }
+
+/* 记 —— 首页直接显示内容 */
+.note-item {
+  margin-bottom: 2.5rem;
+  padding-bottom: 2.5rem;
+  border-bottom: 1px solid var(--border);
+}
+.note-date {
+  display: block;
+  font-size: 0.85rem;
+  color: var(--meta);
+  margin-bottom: 0.75rem;
+}
+.note-body p {
+  margin: 0.5rem 0;
+  line-height: 1.7;
+}
