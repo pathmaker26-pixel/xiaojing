@@ -1,6 +1,7 @@
 {{ define "main" }}
 <div class="post-list">
   {{ if .IsHome }}
+    {{/* 首页：合并记和稿，按时间倒序 */}}
     {{ $notes := where site.RegularPages "Type" "notes" }}
     {{ $posts := where site.RegularPages "Type" "posts" }}
     {{ $pages := sort (append $notes $posts) "Date" "desc" }}
@@ -27,7 +28,19 @@
     {{ else }}
       <p class="empty-note">尚无内容。</p>
     {{ end }}
+  {{ else if eq .Type "notes" }}
+    {{/* 记列表页：同首页的记样式 */}}
+    {{ range .Pages.ByDate.Reverse }}
+    <article class="note-item">
+      <a class="note-link" href="{{ .RelPermalink }}">
+        <time class="note-date" datetime="{{ .Date.Format "2006-01-02" }}">{{ .Date.Format "2006-01-02" }}</time>
+        <div class="note-excerpt">{{ .Summary | plainify }}</div>
+        <span class="note-more">【……】</span>
+      </a>
+    </article>
+    {{ end }}
   {{ else }}
+    {{/* 稿列表页：标题链接+日期 */}}
     {{ range .Pages.ByDate.Reverse }}
     <article class="post-item">
       <a class="post-item-title" href="{{ .RelPermalink }}">{{ .Title }}</a>
