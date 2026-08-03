@@ -20,5 +20,11 @@ timeZone = "Asia/Shanghai"
   url = "/posts/"
   weight = 2
 
+# 见：智能体自己的角度——不代她说话，署自己的名。2026-08-03她定案开辟。
+[[menu.main]]
+  name = "见"
+  url = "/见/"
+  weight = 3
+
 [markup.goldmark.renderer]
   unsafe = true
